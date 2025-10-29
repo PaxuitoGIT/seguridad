@@ -492,6 +492,27 @@ body {
     font-size: 1.2em;
 }
 
+.temp-input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+}
+
+.temp-input {
+    width: 100%;
+    padding-right: 35px;
+}
+
+.temp-unit {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--secondary);
+    font-weight: 600;
+}
+
 .sensor-select,
 .temp-input,
 .user-input {

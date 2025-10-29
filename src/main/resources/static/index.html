@@ -142,8 +142,10 @@
                     <option value="TEMP-002">Armería</option>
                     <option value="TEMP-003">Hangar de Trajes</option>
                 </select>
-                <input type="number" id="tempValue" value="85" min="-10" max="150" class="temp-input">
-                <span>°C</span>
+                <div class="temp-input-wrapper">
+                    <input type="number" id="tempValue" value="85" min="-10" max="150" class="temp-input">
+                    <span class="temp-unit">°C</span>
+                </div>
                 <button class="btn btn-danger" onclick="simulateTemperature()"> Simular</button>
             </div>
 
@@ -172,7 +174,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>© 2025 Stark Industries | Sistema desarrollado por Paxuito</p>
+        <p>© 2025 Stark Industries | Sistema desarrollado por Binhao Y Diego</p>
         <p>Conexión segura | Sistema en línea</p>
     </footer>
 </div>
