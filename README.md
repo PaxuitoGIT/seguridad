@@ -192,10 +192,3 @@ Usa el botón **"Procesar 5 Sensores Simultáneamente"** y observa la consola de
 - El patrón DTO evita problemas de **serialización JSON** con lazy loading de Hibernate
 
 ---
-
-**Desarrollado por**: Binhao Xu y Diego Pizarro  
-**Asignatura**: Programación de Servicios y Procesos  
-**Tecnología**: Spring Framework + Spring Boot  
-**Año**: 2025
-
----
