@@ -15,7 +15,7 @@ public class SeguridadApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SeguridadApplication.class, args);
 		System.out.println("========================================");
-		System.out.println("🛡️  STARK SECURITY SYSTEM ACTIVADO 🛡️");
+		System.out.println("  STARK SECURITY SYSTEM ACTIVADO ");
 		System.out.println("========================================");
 	}
 }
