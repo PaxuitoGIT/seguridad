@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🛡️ Stark Security System</title>
+    <title>Stark Security System</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="container">
     <!-- Header -->
     <header class="header">
         <div class="logo">
-            <h1>🛡️ STARK INDUSTRIES</h1>
+            <h1>STARK INDUSTRIES</h1>
             <p>Security Monitoring System</p>
         </div>
         <div class="user-info">
@@ -25,7 +26,7 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>🔐 Autenticación</h2>
+            <h2>Autenticación</h2>
             <form id="loginForm">
                 <div class="form-group">
                     <label>Usuario:</label>
@@ -40,9 +41,9 @@
             <div class="credentials-help">
                 <p><strong>Usuarios disponibles:</strong></p>
                 <ul>
-                    <li>👨‍💼 tony.stark / jarvis123 (ADMIN)</li>
-                    <li>👩‍💼 pepper.potts / stark123 (OFFICER)</li>
-                    <li>👨‍✈️ happy.hogan / driver123 (VIEWER)</li>
+                    <li>tony.stark / jarvis123 (ADMIN)</li>
+                    <li>pepper.potts / stark123 (OFFICER)</li>
+                    <li>happy.hogan / driver123 (VIEWER)</li>
                 </ul>
             </div>
         </div>
@@ -58,21 +59,21 @@
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">✅</div>
+            <div class="stat-icon"></div>
             <div class="stat-info">
                 <h3 id="activeSensors">0</h3>
                 <p>Sensores Activos</p>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">📊</div>
+            <div class="stat-icon"></div>
             <div class="stat-info">
                 <h3 id="totalEvents">0</h3>
                 <p>Eventos Totales</p>
             </div>
         </div>
         <div class="stat-card alert">
-            <div class="stat-icon">🚨</div>
+            <div class="stat-icon"></div>
             <div class="stat-info">
                 <h3 id="criticalEvents">0</h3>
                 <p>Alertas Críticas</p>
@@ -80,11 +81,21 @@
         </div>
     </section>
 
+    <!-- Gráfico de Rendimiento -->
+    <section class="performance-section">
+        <div class="section-header">
+            <h2>📊 Rendimiento del Sistema en Tiempo Real</h2>
+        </div>
+        <div class="chart-container">
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </section>
+
     <!-- Sensors Grid -->
     <section class="sensors-section">
         <div class="section-header">
             <h2>📡 Sensores del Sistema</h2>
-            <button id="refreshSensors" class="btn btn-secondary">🔄 Actualizar</button>
+            <button id="refreshSensors" class="btn btn-secondary">Actualizar</button>
         </div>
         <div id="sensorsGrid" class="sensors-grid">
             <!-- Sensores se cargarán aquí dinámicamente -->
@@ -97,10 +108,10 @@
             <h2>📋 Eventos Recientes</h2>
             <div class="event-filters">
                 <button class="filter-btn active" data-filter="all">Todos</button>
-                <button class="filter-btn" data-filter="critical">🚨 Críticos</button>
-                <button class="filter-btn" data-filter="MOVEMENT">🏃 Movimiento</button>
-                <button class="filter-btn" data-filter="TEMPERATURE">🌡️ Temperatura</button>
-                <button class="filter-btn" data-filter="ACCESS">🚪 Acceso</button>
+                <button class="filter-btn" data-filter="critical">Críticos</button>
+                <button class="filter-btn" data-filter="MOVEMENT">Movimiento</button>
+                <button class="filter-btn" data-filter="TEMPERATURE">Temperatura</button>
+                <button class="filter-btn" data-filter="ACCESS">Acceso</button>
             </div>
         </div>
         <div id="eventsContainer" class="events-container">
@@ -111,21 +122,21 @@
     <!-- Test Sensors Section -->
     <section class="test-section">
         <div class="section-header">
-            <h2>🧪 Simular Eventos</h2>
+            <h2>Simular Eventos</h2>
         </div>
         <div class="test-controls">
             <div class="test-group">
-                <h3>🏃 Detectar Movimiento</h3>
+                <h3> Detectar Movimiento</h3>
                 <select id="movementSensor" class="sensor-select">
                     <option value="MOV-001">Entrada Principal</option>
                     <option value="MOV-002">Laboratorio Stark</option>
                     <option value="MOV-003">Sala de Servidores</option>
                 </select>
-                <button class="btn btn-warning" onclick="simulateMovement()">⚠️ Detectar Intruso</button>
+                <button class="btn btn-warning" onclick="simulateMovement()"> Detectar Intruso</button>
             </div>
 
             <div class="test-group">
-                <h3>🌡️ Temperatura</h3>
+                <h3>Temperatura</h3>
                 <select id="tempSensor" class="sensor-select">
                     <option value="TEMP-001">Sala de Servidores</option>
                     <option value="TEMP-002">Armería</option>
@@ -133,11 +144,11 @@
                 </select>
                 <input type="number" id="tempValue" value="85" min="-10" max="150" class="temp-input">
                 <span>°C</span>
-                <button class="btn btn-danger" onclick="simulateTemperature()">🔥 Simular</button>
+                <button class="btn btn-danger" onclick="simulateTemperature()"> Simular</button>
             </div>
 
             <div class="test-group">
-                <h3>🚪 Control de Acceso</h3>
+                <h3>Control de Acceso</h3>
                 <select id="accessSensor" class="sensor-select">
                     <option value="ACC-001">Puerta Principal</option>
                     <option value="ACC-002">Ascensor Privado</option>
@@ -147,13 +158,13 @@
                 <label>
                     <input type="checkbox" id="authorized"> Autorizado
                 </label>
-                <button class="btn btn-info" onclick="simulateAccess()">🔐 Simular</button>
+                <button class="btn btn-info" onclick="simulateAccess()"> Simular</button>
             </div>
 
             <div class="test-group full-width">
                 <h3>⚡ Procesamiento Concurrente</h3>
                 <button class="btn btn-primary btn-large" onclick="simulateConcurrent()">
-                    🚀 Procesar 5 Sensores Simultáneamente
+                    Procesar 5 Sensores Simultáneamente
                 </button>
             </div>
         </div>
@@ -162,7 +173,7 @@
     <!-- Footer -->
     <footer class="footer">
         <p>© 2025 Stark Industries | Sistema desarrollado por Paxuito</p>
-        <p>🔒 Conexión segura | 🌐 Sistema en línea</p>
+        <p>Conexión segura | Sistema en línea</p>
     </footer>
 </div>
 

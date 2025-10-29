@@ -1,6 +1,92 @@
 // Estado de la aplicación
-let credentials = null;
+let currentUser = null;
 let currentFilter = 'all';
+let performanceChart;
+let performanceData = {
+    labels: [],
+    cpu: [],
+    memory: [],
+    events: []
+};
+
+// Inicializar gráfico de rendimiento
+function initPerformanceChart() {
+    const ctx = document.getElementById('performanceChart').getContext('2d');
+    performanceChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: performanceData.labels,
+            datasets: [
+                {
+                    label: 'CPU (%)',
+                    data: performanceData.cpu,
+                    borderColor: '#00d9ff',
+                    backgroundColor: 'rgba(0, 217, 255, 0.1)',
+                    tension: 0.4
+                },
+                {
+                    label: 'Memoria (%)',
+                    data: performanceData.memory,
+                    borderColor: '#ffd700',
+                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                    tension: 0.4
+                },
+                {
+                    label: 'Eventos/min',
+                    data: performanceData.events,
+                    borderColor: '#ff4757',
+                    backgroundColor: 'rgba(255, 71, 87, 0.1)',
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: '#e0e0e0' }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { color: '#e0e0e0' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                },
+                x: {
+                    ticks: { color: '#e0e0e0' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                }
+            }
+        }
+    });
+}
+
+// Actualizar datos de rendimiento
+function updatePerformanceChart() {
+    const now = new Date().toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+
+    performanceData.labels.push(now);
+    performanceData.cpu.push(Math.random() * 80 + 10);
+    performanceData.memory.push(Math.random() * 60 + 20);
+    performanceData.events.push(Math.random() * 50);
+
+    // Mantener solo los últimos 20 puntos
+    if (performanceData.labels.length > 20) {
+        performanceData.labels.shift();
+        performanceData.cpu.shift();
+        performanceData.memory.shift();
+        performanceData.events.shift();
+    }
+
+    performanceChart.update();
+}
 
 // Inicializar cuando carga la página
 document.addEventListener('DOMContentLoaded', function() {
@@ -9,8 +95,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initializeApp() {
     setupEventListeners();
-    showLoginModal();
+
+    const savedUser = sessionStorage.getItem('user');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        document.getElementById('username').innerHTML = `👤 Usuario: <strong>${currentUser.fullName} (${currentUser.role})</strong>`;
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('logoutBtn').style.display = 'inline-block';
+
+        loadDashboard();
+        loadSensors();
+        loadEvents();
+        initPerformanceChart();
+        setInterval(updatePerformanceChart, 2000);
+    } else {
+        showLoginModal();
+    }
 }
+
 
 // Configurar event listeners
 function setupEventListeners() {
@@ -43,47 +145,80 @@ function closeLoginModal() {
     document.getElementById('loginModal').style.display = 'none';
 }
 
-function handleLogin(e) {
+async function handleLogin(e) {
     e.preventDefault();
     const username = document.getElementById('usernameInput').value;
     const password = document.getElementById('passwordInput').value;
 
-    credentials = btoa(`${username}:${password}`);
+    try {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
 
-    document.getElementById('username').innerHTML = `👤 Usuario: <strong>${username}</strong>`;
-    document.getElementById('loginBtn').style.display = 'none';
-    document.getElementById('logoutBtn').style.display = 'inline-block';
+        if (response.ok) {
+            const data = await response.json();
+            currentUser = data;
+            sessionStorage.setItem('user', JSON.stringify(data));
 
-    closeLoginModal();
-    showNotification('Login exitoso', 'success');
+            document.getElementById('username').innerHTML = `👤 Usuario: <strong>${data.fullName} (${data.role})</strong>`;
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
 
-    // Cargar datos
-    loadDashboard();
-    loadSensors();
-    loadEvents();
+            closeLoginModal();
+            showNotification('Login exitoso', 'success');
 
-    // Auto-refresh cada 5 segundos
-    setInterval(() => {
-        loadDashboard();
-        loadEvents();
-    }, 5000);
+            // Cargar datos
+            loadDashboard();
+            loadSensors();
+            loadEvents();
+            initPerformanceChart();
+            setInterval(updatePerformanceChart, 2000);
+
+            // Auto-refresh cada 5 segundos
+            setInterval(() => {
+                loadDashboard();
+                loadEvents();
+            }, 5000);
+        } else {
+            showNotification('Credenciales inválidas', 'error');
+        }
+    } catch (error) {
+        console.error('Error en login:', error);
+        showNotification('Error de conexión', 'error');
+    }
 }
 
 function logout() {
-    credentials = null;
+    currentUser = null;
+    sessionStorage.removeItem('user');
     document.getElementById('username').innerHTML = '👤 Usuario: <strong>No autenticado</strong>';
     document.getElementById('loginBtn').style.display = 'inline-block';
     document.getElementById('logoutBtn').style.display = 'none';
+    showNotification('Sesión cerrada correctamente', 'info');
     showLoginModal();
 }
 
+
 // API Functions
 async function apiCall(endpoint, method = 'GET', body = null) {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+
+    if (!user) {
+        showNotification('Debes iniciar sesión', 'warning');
+        showLoginModal();
+        throw new Error('No autenticado');
+    }
+
     const options = {
         method: method,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Basic ${credentials}`
+            'X-User': user.username,
+            'X-Role': user.role
         }
     };
 
@@ -94,23 +229,19 @@ async function apiCall(endpoint, method = 'GET', body = null) {
     try {
         const response = await fetch(`/api/${endpoint}`, options);
 
-        // Si la respuesta no es OK, lanzar error
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Verificar si hay contenido para parsear
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {
             return await response.json();
         } else {
-            // Si no es JSON, retornar texto
             const text = await response.text();
-            console.log('Respuesta no-JSON:', text);
             return { success: true, message: text };
         }
     } catch (error) {
-        console.error('Error completo:', error);
+        console.error('Error:', error);
         showNotification('Error: ' + error.message, 'error');
         return null;
     }
@@ -331,3 +462,4 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
