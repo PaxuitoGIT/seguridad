@@ -12,6 +12,14 @@ Sistema de seguridad concurrente desarrollado con **Spring Boot** que gestiona m
 
 ---
 
+---
+
+## Arquitectura del Sistema
+
+![Diagrama de Arquitectura](ìmages/DiagramaAqruitectura.png)
+
+---
+
 ## Lógica de la Solución
 
 El sistema implementa una arquitectura basada en **Spring Framework** que utiliza:
