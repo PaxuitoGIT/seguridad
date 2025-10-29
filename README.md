@@ -12,7 +12,6 @@ Sistema de seguridad concurrente desarrollado con **Spring Boot** que gestiona m
 
 ---
 
----
 
 ## Arquitectura del Sistema
 
