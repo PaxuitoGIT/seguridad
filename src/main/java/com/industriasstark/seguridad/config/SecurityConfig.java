@@ -32,6 +32,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configuración de usuarios en memoria
+     */
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
 
@@ -61,6 +64,9 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(admin, securityOfficer, viewer);
     }
 
+    /**
+     * Configuración CORS para permitir solicitudes desde cualquier origen
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -75,6 +81,9 @@ public class SecurityConfig {
         return source;
     }
 
+    /**
+     * Configuración de seguridad HTTP
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

@@ -16,7 +16,6 @@ public class NotificationService {
 
     /**
      * Envía alerta de forma asíncrona
-     *
      * En producción, esto enviaría WebSocket, email, SMS, etc.
      */
     @Async("sensorTaskExecutor")

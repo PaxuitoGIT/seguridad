@@ -23,7 +23,7 @@ public class SensorEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)  // CAMBIO: EAGER en lugar de LAZY
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sensor_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Sensor sensor;
@@ -34,7 +34,7 @@ public class SensorEvent {
     @Column(columnDefinition = "CLOB")
     private String description;
 
-    @Column(name = "event_value")  // CAMBIO: nombre explícito
+    @Column(name = "event_value")
     private Double value;
 
     @Column(nullable = false)

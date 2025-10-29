@@ -6,7 +6,6 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Interfaz para servicios de procesamiento de sensores
- *
  * Define el contrato para todos los tipos de sensores.
  * Demuestra el principio de Inversión de Control (IoC) del Tema 1.
  */

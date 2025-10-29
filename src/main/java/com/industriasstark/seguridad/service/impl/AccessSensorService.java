@@ -50,7 +50,6 @@ public class AccessSensorService implements SensorService {
         event.setDescription(String.format("%s - Usuario: %s en %s",
                 authorized ? "✓ Acceso autorizado" : "⛔ Acceso denegado",
                 userId, sensor.getLocation()));
-        // <-- cambio: usar setEventValue en lugar de setValue
         event.setValue(authorized ? 1.0 : 0.0);
         event.setCritical(isCritical(data));
         event.setDetectedAt(LocalDateTime.now());

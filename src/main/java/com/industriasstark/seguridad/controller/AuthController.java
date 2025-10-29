@@ -22,6 +22,9 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Endpoint de login
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
@@ -43,6 +46,7 @@ public class AuthController {
                 .body(Map.of("success", false, "message", "Credenciales inválidas"));
     }
 
+    // Metodo para obtener el nombre completo basado en el nombre de usuario
     private String getFullName(String username) {
         switch (username) {
             case "tony.stark": return "Tony Stark";
@@ -52,6 +56,7 @@ public class AuthController {
         }
     }
 
+    // Clase interna para la solicitud de login
     static class LoginRequest {
         private String username;
         private String password;

@@ -8,7 +8,6 @@ import java.util.concurrent.Executor;
 
 /**
  * Configuración para procesamiento asíncrono y concurrente
- *
  * Define un ExecutorService personalizado para manejar tareas concurrentes.
  * Permite procesar múltiples sensores simultáneamente.
  * Demuestra el uso de @Bean y configuración programática del Tema 1.

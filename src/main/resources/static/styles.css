@@ -595,12 +595,12 @@ body {
 }
 
 .performance-section {
-    background: var(--card-background);
-    border-radius: var(--border-radius);
+    border-radius: 15px;
     padding: 2rem;
     margin-bottom: 2rem;
     box-shadow: var(--shadow);
 }
+
 
 .chart-container {
     position: relative;

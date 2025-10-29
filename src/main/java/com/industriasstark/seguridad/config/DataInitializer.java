@@ -13,7 +13,6 @@ import java.util.List;
 
 /**
  * Inicializa datos de prueba al arrancar la aplicación
- *
  * CommandLineRunner se ejecuta después de que Spring Boot arranque
  */
 @Component
